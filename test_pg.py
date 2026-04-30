@@ -3,7 +3,7 @@ import os
 
 print("=== PostgreSQL Full Test ===")
 
-# Конфигурация (убедись, что параметры верны для твоего окружения)
+
 pg_config = {
     'host': 'localhost',
     'user': 'admin',
@@ -14,7 +14,6 @@ pg_config = {
 
 try:
     with DatabaseManager(db_type='postgresql', config=pg_config) as db:
-        # 0. Подготовка: создаем таблицу для тестов
         db.execute_query("""
             CREATE TABLE IF NOT EXISTS test_users (
                 id SERIAL PRIMARY KEY,
@@ -24,10 +23,10 @@ try:
             )
         """)
         
-        # Очистим, если там что-то было
+
         db.execute_query("TRUNCATE TABLE test_users")
 
-        # Заполняем данными
+  
         db.create('test_users', {'name': 'Alice', 'age': 25, 'email': 'alice@example.com'})
         db.create('test_users', {'name': 'Bob', 'age': 19, 'email': 'bob@example.com'})
         db.create('test_users', {'name': 'Charlie', 'age': 30, 'email': 'charlie@example.com'})
@@ -69,7 +68,7 @@ try:
         db.drop_table('users_backup')
         db.drop_table('test_users')
 
-        # Удаляем временный файл
+   
         if os.path.exists(csv_file):
             os.remove(csv_file)
 

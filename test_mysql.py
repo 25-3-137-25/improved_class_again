@@ -3,14 +3,11 @@ import os
 
 print("=== MySQL Full Integration Test ===")
 
-# Используем конфиг по умолчанию из твоего класса (Jino)
-# Если нужно протестировать локально, просто передай другой config={}
+
 try:
     with DatabaseManager(db_type='mysql') as db:
         
-        # 0. Подготовка таблицы
-        # Создаем таблицу, если её нет. 
-        # В MySQL используем AUTO_INCREMENT для первичного ключа.
+ 
         db.execute_query("""
             CREATE TABLE IF NOT EXISTS test_mysql_table (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -20,10 +17,10 @@ try:
             )
         """)
         
-        # Очищаем таблицу перед тестом
+     
         db.execute_query("TRUNCATE TABLE test_mysql_table")
 
-        # Заполнение данными (CREATE)
+
         db.create('test_mysql_table', {'name': 'Ivan', 'age': 25, 'status': 'active'})
         db.create('test_mysql_table', {'name': 'Maria', 'age': 18, 'status': 'pending'})
         db.create('test_mysql_table', {'name': 'Petr', 'age': 40, 'status': 'active'})
@@ -39,7 +36,7 @@ try:
         print(f"Получено строк: {len(range_rows)}")
 
         print("\n3. --- Вывод структуры таблицы ---")
-        # В MySQL это выведет результат команды DESCRIBE
+   
         structure = db.get_table_structure('test_mysql_table')
         for column in structure:
             print(f"Поле: {column['Field']}, Тип: {column['Type']}, NULL: {column['Null']}")
@@ -50,7 +47,7 @@ try:
 
         print("\n5. --- Работа с колонками (Добавление и удаление 'last_login') ---")
         db.add_column('test_mysql_table', 'last_login', 'DATETIME')
-        # Проверим, что колонка появилась
+      
         if any(col['Field'] == 'last_login' for col in db.get_table_structure('test_mysql_table')):
             print("✅ Колонка добавлена")
         
@@ -62,7 +59,7 @@ try:
         db.export_to_csv('test_mysql_table', filename)
 
         print("\n7. --- Импорт из CSV (в новую таблицу) ---")
-        # Создаем пустую копию таблицы для импорта
+   
         db.execute_query("CREATE TABLE IF NOT EXISTS test_mysql_import LIKE test_mysql_table")
         db.execute_query("TRUNCATE TABLE test_mysql_import")
         db.import_from_csv('test_mysql_import', filename)
@@ -82,7 +79,7 @@ try:
         db.drop_table('test_mysql_import')
         db.drop_table('test_mysql_table')
 
-        # Удаление временного файла
+    
         if os.path.exists(filename):
             os.remove(filename)
 

@@ -131,9 +131,7 @@ class DatabaseManager:
             print(f"❌ Ошибка DELETE: {e}")
             raise
 
-    # --- НОВЫЕ МЕТОДЫ (ПО ВАШЕМУ СПИСКУ) ---
 
-    # 1. Вывод конкретного столбца в порядке убывания или возрастания
     def get_sorted_column(self, table: str, column: str, ascending: bool = True) -> list:
         self._ensure_connection()
         order = "ASC" if ascending else "DESC"
@@ -145,7 +143,6 @@ class DatabaseManager:
             print(f"❌ Ошибка сортировки: {e}")
             return []
 
-    # 2. Вывод диапазона строк по айди
     def get_range_by_id(self, table: str, start_id: int, end_id: int, id_column: str = 'id') -> list:
         self._ensure_connection()
         query = f"SELECT * FROM {table} WHERE {id_column} BETWEEN %s AND %s"
@@ -156,7 +153,6 @@ class DatabaseManager:
             print(f"❌ Ошибка получения диапазона: {e}")
             return []
 
-    # 3. Удаление диапазона строк по айди
     def delete_range_by_id(self, table: str, start_id: int, end_id: int, id_column: str = 'id') -> int:
         self._ensure_connection()
         query = f"DELETE FROM {table} WHERE {id_column} BETWEEN %s AND %s"
@@ -170,7 +166,6 @@ class DatabaseManager:
             print(f"❌ Ошибка удаления диапазона: {e}")
             return 0
 
-    # 4. Вывод структуры таблицы
     def get_table_structure(self, table: str) -> list:
         self._ensure_connection()
         try:
@@ -186,7 +181,6 @@ class DatabaseManager:
             print(f"❌ Ошибка получения структуры: {e}")
             return []
 
-    # 5. Вывод строки содержащей конкретное значение в конкретном столбце
     def find_by_value(self, table: str, column: str, value) -> list:
         self._ensure_connection()
         query = f"SELECT * FROM {table} WHERE {column} = %s"
@@ -197,7 +191,6 @@ class DatabaseManager:
             print(f"❌ Ошибка поиска по значению: {e}")
             return []
 
-    # 6. Удаление таблицы
     def drop_table(self, table: str) -> bool:
         self._ensure_connection()
         try:
@@ -209,7 +202,6 @@ class DatabaseManager:
             print(f"❌ Ошибка удаления таблицы: {e}")
             return False
 
-    # 7. Добавление и удаление нового столбца
     def add_column(self, table: str, column_name: str, column_type: str) -> bool:
         self._ensure_connection()
         try:
@@ -232,7 +224,6 @@ class DatabaseManager:
             print(f"❌ Ошибка удаления колонки: {e}")
             return False
 
-    # 8. Экспорт и импорт в CSV
     def export_to_csv(self, table: str, file_path: str):
         self._ensure_connection()
         try:
